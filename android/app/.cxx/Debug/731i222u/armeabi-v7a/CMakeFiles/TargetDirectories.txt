@@ -1,0 +1,2 @@
+C:/Users/Flavio Propp/Documents/Projeto2048Rafa/Projeto-Flutter-2048/android/app/.cxx/Debug/731i222u/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Flavio Propp/Documents/Projeto2048Rafa/Projeto-Flutter-2048/android/app/.cxx/Debug/731i222u/armeabi-v7a/CMakeFiles/rebuild_cache.dir

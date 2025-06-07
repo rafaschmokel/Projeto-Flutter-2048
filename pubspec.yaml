@@ -58,7 +58,23 @@ flutter:
   uses-material-design: true
 
   assets:
+   - assets/fonts/
 
+  fonts: 
+    - family: Bungee
+      fonts:
+      - asset: assets/fonts/Bungee-Regular.ttf
+        weight: 400
+    - family: Montserrat
+      fonts:
+      - asset: assets/fonts/Montserrat-Regular.ttf
+        weight: 600
+      - asset: assets/fonts/Montserrat-Bold.ttf
+        weight: 700
+    - family: RobotoCondensed
+      fonts:
+      - asset: assets/fonts/RobotoCondensed-Regular.ttf
+        weight: 400
 
   # To add assets to your application, add an assets section, like this:
   # assets:
