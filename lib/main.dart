@@ -11,16 +11,7 @@ class Jogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Jogo 2048', home: HomeScreen());
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(title: '2048', home: const HomePage());
+    return MaterialApp(title: 'Jogo 2048', home: HomePage());
   }
 }
 
@@ -171,22 +162,27 @@ class _PaginaJogoState extends State<PaginaJogo> {
     if (ganhou || perdeu) return;
 
     bool moved = false;
+    List<List<int>> newGrid = List.generate(
+      widget.gridSize,
+      (i) => List.from(grid[i]),
+    );
 
     for (int j = 0; j < widget.gridSize; j++) {
       for (int i = 1; i < widget.gridSize; i++) {
-        if (grid[i][j] != 0) {
+        if (newGrid[i][j] != 0) {
           int k = i;
-          while (k > 0 && grid[k - 1][j] == 0) {
-            grid[k - 1][j] = grid[k][j];
-            grid[k][j] = 0;
+          while (k > 0 && newGrid[k - 1][j] == 0) {
+            newGrid[k - 1][j] = newGrid[k][j];
+            newGrid[k][j] = 0;
             k--;
             moved = true;
           }
 
-          if (k > 0 && grid[k - 1][j] == grid[k][j]) {
-            grid[k - 1][j] *= 2;
-            grid[k][j] = 0;
+          if (k > 0 && newGrid[k - 1][j] == newGrid[k][j]) {
+            newGrid[k - 1][j] *= 2;
+            newGrid[k][j] = 0;
             moved = true;
+            if (newGrid[k - 1][j] > max) max = newGrid[k - 1][j];
             checkVitoria();
           }
         }
@@ -195,6 +191,7 @@ class _PaginaJogoState extends State<PaginaJogo> {
 
     if (moved) {
       setState(() {
+        grid = newGrid;
         moves++;
         addNovoNumero();
         checkDerrota();
@@ -206,22 +203,27 @@ class _PaginaJogoState extends State<PaginaJogo> {
     if (ganhou || perdeu) return;
 
     bool moved = false;
+    List<List<int>> newGrid = List.generate(
+      widget.gridSize,
+      (i) => List.from(grid[i]),
+    );
 
     for (int j = 0; j < widget.gridSize; j++) {
-      for (int i = widget.gridSize - 2; i >= 1; i--) {
-        if (grid[i][j] != 0) {
+      for (int i = widget.gridSize - 2; i >= 0; i--) {
+        if (newGrid[i][j] != 0) {
           int k = i;
-          while (k < widget.gridSize - 1 && grid[k + 1][j] == 0) {
-            grid[k + 1][j] = grid[k][j];
-            grid[k][j] = 0;
+          while (k < widget.gridSize - 1 && newGrid[k + 1][j] == 0) {
+            newGrid[k + 1][j] = newGrid[k][j];
+            newGrid[k][j] = 0;
             k++;
             moved = true;
           }
 
-          if (k < widget.gridSize && grid[k + 1][j] == grid[k][j]) {
-            grid[k + 1][j] *= 2;
-            grid[k][j] = 0;
+          if (k < widget.gridSize - 1 && newGrid[k + 1][j] == newGrid[k][j]) {
+            newGrid[k + 1][j] *= 2;
+            newGrid[k][j] = 0;
             moved = true;
+            if (newGrid[k + 1][j] > max) max = newGrid[k + 1][j];
             checkVitoria();
           }
         }
@@ -230,6 +232,7 @@ class _PaginaJogoState extends State<PaginaJogo> {
 
     if (moved) {
       setState(() {
+        grid = newGrid;
         moves++;
         addNovoNumero();
         checkDerrota();
@@ -241,22 +244,27 @@ class _PaginaJogoState extends State<PaginaJogo> {
     if (ganhou || perdeu) return;
 
     bool moved = false;
+    List<List<int>> newGrid = List.generate(
+      widget.gridSize,
+      (i) => List.from(grid[i]),
+    );
 
     for (int i = 0; i < widget.gridSize; i++) {
       for (int j = 1; j < widget.gridSize; j++) {
-        if (grid[i][j] != 0) {
-          int k = i;
-          while (k > 0 && grid[i][k - 1] == 0) {
-            grid[i][k - 1] = grid[i][k];
-            grid[i][k] = 0;
+        if (newGrid[i][j] != 0) {
+          int k = j;
+          while (k > 0 && newGrid[i][k - 1] == 0) {
+            newGrid[i][k - 1] = newGrid[i][k];
+            newGrid[i][k] = 0;
             k--;
             moved = true;
           }
 
-          if (k > 0 && grid[i][k - 1] == grid[i][k]) {
-            grid[i][k - 1] *= 2;
-            grid[i][k] = 0;
+          if (k > 0 && newGrid[i][k - 1] == newGrid[i][k]) {
+            newGrid[i][k - 1] *= 2;
+            newGrid[i][k] = 0;
             moved = true;
+            if (newGrid[i][k - 1] > max) max = newGrid[i][k - 1];
             checkVitoria();
           }
         }
@@ -265,6 +273,7 @@ class _PaginaJogoState extends State<PaginaJogo> {
 
     if (moved) {
       setState(() {
+        grid = newGrid;
         moves++;
         addNovoNumero();
         checkDerrota();
@@ -272,26 +281,31 @@ class _PaginaJogoState extends State<PaginaJogo> {
     }
   }
 
-  void moveDireira() {
+  void moveDireita() {
     if (ganhou || perdeu) return;
 
     bool moved = false;
+    List<List<int>> newGrid = List.generate(
+      widget.gridSize,
+      (i) => List.from(grid[i]),
+    );
 
     for (int i = 0; i < widget.gridSize; i++) {
-      for (int j = 1; j < widget.gridSize; j++) {
-        if (grid[i][j] != 0) {
+      for (int j = widget.gridSize - 2; j >= 0; j--) {
+        if (newGrid[i][j] != 0) {
           int k = j;
-          while (k > 0 && grid[i][k - 1] == 0) {
-            grid[i][k - 1] = grid[i][k];
-            grid[i][k] = 0;
-            k--;
+          while (k < widget.gridSize - 1 && newGrid[i][k + 1] == 0) {
+            newGrid[i][k + 1] = newGrid[i][k];
+            newGrid[i][k] = 0;
+            k++;
             moved = true;
           }
 
-          if (k > 0 && grid[i][k - 1] == grid[i][k]) {
-            grid[i][k - 1] *= 2;
-            grid[i][k] = 0;
+          if (k < widget.gridSize - 1 && newGrid[i][k + 1] == newGrid[i][k]) {
+            newGrid[i][k + 1] *= 2;
+            newGrid[i][k] = 0;
             moved = true;
+            if (newGrid[i][k + 1] > max) max = newGrid[i][k + 1];
             checkVitoria();
           }
         }
@@ -300,6 +314,7 @@ class _PaginaJogoState extends State<PaginaJogo> {
 
     if (moved) {
       setState(() {
+        grid = newGrid;
         moves++;
         addNovoNumero();
         checkDerrota();
@@ -307,22 +322,91 @@ class _PaginaJogoState extends State<PaginaJogo> {
     }
   }
 
-  void checkVitoria() {}
+  void checkVitoria() {
+    for (int i = 0; i < widget.gridSize; i++) {
+      for (int j = 0; j < widget.gridSize; j++) {
+        if (grid[i][j] == widget.objetivo) {
+          setState(() {
+            ganhou = true;
+          });
+          return;
+        }
+      }
+    }
+  }
 
-  void checkDerrota() {}
+  void checkDerrota() {
+    for (int i = 0; i < widget.gridSize; i++) {
+      for (int j = 0; j < widget.gridSize; j++) {
+        if (grid[i][j] == 0) return;
+      }
+    }
 
-  Widget criarBotaoMove(BuildContext context, IconData icone) {
-    return Container(
-      height: 70,
-      width: 70,
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.purple.shade200,
-        border: Border.all(color: Colors.indigo.shade600, width: 3),
-        borderRadius: BorderRadius.circular(8),
+    for (int i = 0; i < widget.gridSize; i++) {
+      for (int j = 0; j < widget.gridSize; j++) {
+        if (i < widget.gridSize - 1 && grid[i][j] == grid[i + 1][j]) {
+          return;
+        }
+        if (j < widget.gridSize - 1 && grid[i][j] == grid[i][j + 1]) {
+          return;
+        }
+      }
+    }
+
+    setState(() {
+      perdeu = true;
+    });
+  }
+
+  Color getBotaoCor(int value) {
+    if (value == 0) return Colors.deepPurple.shade100;
+    if (value == 2) return Colors.amber.shade100;
+    if (value == 4) return Colors.amber.shade200;
+    if (value == 8) return Colors.amber.shade300;
+    if (value == 16) return Colors.amber.shade400;
+    if (value == 32) return Colors.amber.shade500;
+    if (value == 64) return Colors.amber.shade600;
+    if (value == 128) return Colors.amber.shade700;
+    if (value == 256) return Colors.amber.shade800;
+    if (value == 512) return Colors.amber.shade900;
+    if (value == 1024) return Colors.deepOrange.shade400;
+    if (value == 2048) return Colors.deepOrange.shade600;
+    if (value == 4096) return Colors.red.shade700;
+    return Colors.grey;
+  }
+
+  Color getTextoCor(int value) {
+    return value < 16 ? Colors.deepPurple.shade800 : Colors.white;
+  }
+
+  void restart() {
+    setState(() {
+      moves = 0;
+      ganhou = false;
+      perdeu = false;
+      startGame();
+    });
+  }
+
+  Widget criarBotaoMove(
+    BuildContext context,
+    IconData icone,
+    VoidCallback onPressed,
+  ) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        height: 70,
+        width: 70,
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.purple.shade200,
+          border: Border.all(color: Colors.indigo.shade600, width: 3),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        alignment: Alignment.center,
+        child: Icon(icone, size: 36, color: Colors.indigo.shade600),
       ),
-      alignment: Alignment.center,
-      child: Icon(icone, size: 36, color: Colors.indigo.shade600),
     );
   }
 
@@ -339,6 +423,12 @@ class _PaginaJogoState extends State<PaginaJogo> {
           ),
         ),
         backgroundColor: Colors.amber.shade50,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh, color: Colors.indigo.shade600),
+            onPressed: restart,
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -359,51 +449,106 @@ class _PaginaJogoState extends State<PaginaJogo> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     alignment: Alignment.center,
-                    child: Text(
-                      'Movimentos: ',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.indigo.shade800,
-                        fontFamily: 'Montserrat',
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          'Movimentos: $moves',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.indigo.shade800,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                        Text(
+                          'Máximo: $max',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.indigo.shade800,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 80),
+            SizedBox(height: 20),
 
-            SizedBox(
-              height: 500,
+            if (ganhou)
+              Container(
+                padding: EdgeInsets.all(10),
+                color: Colors.deepPurple.shade200,
+                child: Text(
+                  'PARABÉNS! Você ganhou!',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.amber.shade400,
+                    fontFamily: 'Montserrat.bold',
+                  ),
+                ),
+              ),
+
+            if (perdeu)
+              Container(
+                padding: EdgeInsets.all(10),
+                color: Colors.amber.shade200,
+                child: Text(
+                  'GAME OVER',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.purple.shade400,
+                    fontFamily: 'Montserrat.bold',
+                  ),
+                ),
+              ),
+
+            SizedBox(height: 20),
+
+            Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: widget.gridSize,
                 ),
-                itemBuilder:
-                    (context, index) => Container(
-                      margin: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        color: Colors.deepPurple.shade200,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            blurRadius: 4,
-                            offset: Offset(2, 2),
-                          ),
-                        ],
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '2',
-                          style: TextStyle(
-                            color: Color.fromRGBO(57, 73, 171, 1),
-                            fontSize: 24,
-                            fontFamily: 'RobotoCondensed',
-                          ),
+                itemBuilder: (context, index) {
+                  int row = index ~/ widget.gridSize;
+                  int col = index % widget.gridSize;
+                  int value = grid[row][col];
+
+                  return Container(
+                    margin: EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: getBotaoCor(value),
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          blurRadius: 4,
+                          offset: Offset(2, 2),
                         ),
-                      ),
+                      ],
                     ),
+                    child: Center(
+                      child:
+                          value != 0
+                              ? Text(
+                                value.toString(),
+                                style: TextStyle(
+                                  fontSize:
+                                      value < 100
+                                          ? 32
+                                          : value < 1000
+                                          ? 28
+                                          : 24,
+                                  color: getTextoCor(value),
+                                  fontFamily: 'RobotoCondensed',
+                                ),
+                              )
+                              : SizedBox(),
+                    ),
+                  );
+                },
                 itemCount: widget.gridSize * widget.gridSize,
               ),
             ),
@@ -413,13 +558,13 @@ class _PaginaJogoState extends State<PaginaJogo> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                criarBotaoMove(context, Icons.arrow_back),
+                criarBotaoMove(context, Icons.arrow_back, moveEsquerda),
                 SizedBox(width: 10),
-                criarBotaoMove(context, Icons.arrow_forward),
+                criarBotaoMove(context, Icons.arrow_forward, moveDireita),
                 SizedBox(width: 10),
-                criarBotaoMove(context, Icons.arrow_upward),
+                criarBotaoMove(context, Icons.arrow_upward, moveCima),
                 SizedBox(width: 10),
-                criarBotaoMove(context, Icons.arrow_downward),
+                criarBotaoMove(context, Icons.arrow_downward, moveBaixo),
               ],
             ),
           ],

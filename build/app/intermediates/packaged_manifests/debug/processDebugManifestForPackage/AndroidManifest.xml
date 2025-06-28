@@ -40,7 +40,7 @@
         android:debuggable="true"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="rafa_tinf4" >
+        android:label="2048" >
         <activity
             android:name="com.example.rafa_tinf4.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
